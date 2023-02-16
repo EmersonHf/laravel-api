@@ -30,7 +30,7 @@ Route::get('/setup',function(){
     ];
     try {
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $user = User::class(Auth::user());
 
             // Define constants for token names
             $TOKEN_NAMES = [
