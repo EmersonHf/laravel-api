@@ -13,6 +13,7 @@ use Tests\TestCase;
 
 class CustomersTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -30,11 +31,43 @@ class CustomersTest extends TestCase
 
     public function test_customer_can_see_index()
     {
-        $customer = Customer::factory()->create();
+        $customer = Customer::create([
+            'name' => 'customer 1',
+            'type' => 'B',
+            'email' => 'customer@email.com',
+            'address' => 'rua 1',
+            'city' => 'city 2',
+            'state' => 'state 3',
+            'postal_code' => '55449901'
+        ]);
 
         $response = $this->actingAs($customer)->get('/api/v1/customers');
-
         $response->assertStatus(200);
+
+    }
+
+    public function test_customer_contains_empty_table()
+    {
+        $this->assertDatabaseCount('customers', 0);
+
+
+    }
+
+    public function test_customer_contains_non_empty_table()
+    {
+        $customer = Customer::create([
+            'name' => 'customer 1',
+            'type' => 'B',
+            'email' => 'customer@email.com',
+            'address' => 'rua 1',
+            'city' => 'city 2',
+            'state' => 'state 3',
+            'postal_code' => '55449901'
+        ]);
+
+        $response = $this->actingAs($customer)->get('/api/v1/customers');
+        $response->assertStatus(200);
+
 
     }
 }
